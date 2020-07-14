@@ -24,9 +24,12 @@ class ExampleUnitTest {
     @Test
     fun sortArray() {
         var nums = intArrayOf(1, 45, 22, 67, 89, 100, 2, 34, 56, 78, 99)
-        quickSort(nums, 0, nums.size - 1)
+//        quickSort(nums, 0, nums.size - 1)
+
+        mergeSort(nums,0,nums.size-1)
+        println("排序结果")
         nums.forEach {
-            print("排序结果：$it ")
+            print("${it},")
         }
     }
 
@@ -38,7 +41,7 @@ class ExampleUnitTest {
         //从中间，分两组
         if (bgn >= end) return
         val mid = (bgn + end) / 2
-        Log.i("linlian", "bgn=$bgn，end=$end mid=$mid")
+        println( "bgn=$bgn，end=$end mid=$mid")
         mergeSort(nums, bgn, mid)
         mergeSort(nums, mid + 1, end)
         mergeSortInOrder(nums, bgn, mid, end)
@@ -46,8 +49,33 @@ class ExampleUnitTest {
 
     }
 
+    /**
+     * 假设左边的和右边的都有序了，要把两个数据合并成新的有序数据
+     */
     fun mergeSortInOrder(nums: IntArray, bgn: Int, mid: Int, end: Int) {
+        if (bgn >= end) return
+        val tempArray = IntArray(end - bgn + 1)
+        println("待排序数据大小 ${tempArray.size}")
+        var pL = bgn
+        var pR = mid + 1
 
+        var cur = 0
+        while (pL <= mid && pR <= end) {
+            tempArray[cur++] = if (nums[pL] < nums[pR]) nums[pL++] else nums[pR++]
+            //把小的放到temp里面，指针向后挪
+        }
+        while (pL <= mid) {
+            tempArray[cur++] = nums[pL++] //对比结束后，左边还有，全部拷贝
+        }
+
+        while (pR <= end) {
+            tempArray[cur++] = nums[pR++]//右边还没放完
+        }
+
+        var i = 0
+        tempArray.forEach {
+            nums[bgn + i++] = it
+        }
     }
 
 
